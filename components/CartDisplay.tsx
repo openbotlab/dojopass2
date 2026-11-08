@@ -1,16 +1,16 @@
 'use client';
 
 import React from 'react';
-import { useCart } from '../contexts/CartContext';
+import { useCart, type CartItem } from '../contexts/CartContext';
 
 const CartDisplay = () => {
   const { state, dispatch } = useCart();
 
-  const handleRemove = (item) => {
+  const handleRemove = (item: CartItem) => {
     dispatch({ type: 'REMOVE_ITEM', payload: item });
   };
 
-  const totalPrice = state.items.reduce((total, item) => total + item.price, 0);
+  const totalPrice = state.items.reduce((total, item) => total + (item.price ?? 0), 0);
 
   return (
     <div>
@@ -19,7 +19,9 @@ const CartDisplay = () => {
         <ul>
           {state.items.map((item) => (
             <li key={item.id}>
-              <span>{item.name} - ${item.price.toFixed(2)}</span>
+              <span>
+                {item.name ?? 'Item'} - ${(item.price ?? 0).toFixed(2)}
+              </span>
               <button onClick={() => handleRemove(item)}>Remove</button>
             </li>
           ))}
